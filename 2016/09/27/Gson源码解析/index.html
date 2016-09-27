@@ -1,0 +1,722 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="源码解析,Android," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Gson使用方法：Gson.fromJson(String json, Class clazz)所以从 fromJson 开始解析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gson源码解析">
+<meta property="og:url" content="http://yoursite.com/2016/09/27/Gson源码解析/index.html">
+<meta property="og:site_name" content="5A59-CODING">
+<meta property="og:description" content="Gson使用方法：Gson.fromJson(String json, Class clazz)所以从 fromJson 开始解析">
+<meta property="og:image" content="http://yoursite.com/img/gson/gson.png">
+<meta property="og:updated_time" content="2016-09-27T03:36:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gson源码解析">
+<meta name="twitter:description" content="Gson使用方法：Gson.fromJson(String json, Class clazz)所以从 fromJson 开始解析">
+<meta name="twitter:image" content="http://yoursite.com/img/gson/gson.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/27/Gson源码解析/"/>
+
+  <title> Gson源码解析 | 5A59-CODING </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?da06b1d09b48c4137db793190731bacb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">5A59-CODING</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Gson源码解析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-27T10:06:59+08:00" content="2016-09-27">
+              2016-09-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/源码解析/" itemprop="url" rel="index">
+                    <span itemprop="name">源码解析</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/27/Gson源码解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/27/Gson源码解析/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Gson使用方法：<br>Gson.fromJson(String json, Class clazz)<br>所以从 fromJson 开始解析</p>
+<a id="more"></a>
+<p><strong>Gson.java</strong></p>
+<p>fromJson() 有多个重载函数，最终都会调用下面这个</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(JsonReader reader, Type typeOfT)</span> <span class="keyword">throws</span> JsonIOException, JsonSyntaxException </span>&#123;</div><div class="line">    <span class="keyword">boolean</span> isEmpty = <span class="keyword">true</span>;</div><div class="line">    <span class="keyword">boolean</span> oldLenient = reader.isLenient(); <span class="comment">// lenient : 宽容</span></div><div class="line">    reader.setLenient(<span class="keyword">true</span>);</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      reader.peek(); <span class="comment">// 返回下一个标记 但不会消耗， 应该是为了看看是否抛出异常</span></div><div class="line">      isEmpty = <span class="keyword">false</span>;</div><div class="line">      <span class="comment">// TypeToken 就是对 Type 的一个封装</span></div><div class="line">      TypeToken&lt;T&gt; typeToken = (TypeToken&lt;T&gt;) TypeToken.get(typeOfT); <span class="comment">// 根据Type获取对应的 TypeToken</span></div><div class="line">      TypeAdapter&lt;T&gt; typeAdapter = getAdapter(typeToken); <span class="comment">// 获取对应的 adapter</span></div><div class="line">      T object = typeAdapter.read(reader);</div><div class="line">      <span class="keyword">return</span> object;</div><div class="line">    &#125; <span class="keyword">catch</span> (EOFException e) &#123;</div><div class="line">      <span class="comment">/*</span></div><div class="line">       * For compatibility with JSON 1.5 and earlier, we return null for empty</div><div class="line">       * documents instead of throwing.</div><div class="line">       */</div><div class="line">      <span class="keyword">if</span> (isEmpty) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</div><div class="line">    &#125; <span class="keyword">catch</span> (IllegalStateException e) &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</div><div class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</div><div class="line">    &#125; <span class="keyword">finally</span> &#123;</div><div class="line">      reader.setLenient(oldLenient);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">TypeAdapter&lt;T&gt; <span class="title">getAdapter</span><span class="params">(TypeToken&lt;T&gt; type)</span> </span>&#123;</div><div class="line">  <span class="comment">// 省略部分代码</span></div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    FutureTypeAdapter&lt;T&gt; call = <span class="keyword">new</span> FutureTypeAdapter&lt;T&gt;();</div><div class="line">    threadCalls.put(type, call);</div><div class="line"></div><div class="line">    <span class="comment">// 遍历所有的 TypeAdapterFactory ，找到匹配的 Adapter</span></div><div class="line">    <span class="comment">// TypeAdapterFactory.create() 会返回对应的 TypeAdapter， 如果 TypeToken 不符合的话返回 null</span></div><div class="line">    <span class="keyword">for</span> (TypeAdapterFactory factory : factories) &#123;</div><div class="line">      TypeAdapter&lt;T&gt; candidate = factory.create(<span class="keyword">this</span>, type);</div><div class="line">      <span class="keyword">if</span> (candidate != <span class="keyword">null</span>) &#123;</div><div class="line">        call.setDelegate(candidate);</div><div class="line">        typeTokenCache.put(type, candidate);</div><div class="line">        <span class="keyword">return</span> candidate;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"GSON cannot handle "</span> + type);</div><div class="line">  &#125; <span class="keyword">finally</span> &#123;</div><div class="line">    threadCalls.remove(type);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (requiresThreadLocalCleanup) &#123;</div><div class="line">      calls.remove();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面 getAdapter 代码中会遍历存储 TypeAdapterFactory 的 factories 来找匹配的 TypeAdapter<br>那 factories 是什么时候添加的？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">Gson( ... 省略参数 ... ) &#123;</div><div class="line"></div><div class="line">    <span class="comment">// 省略部分代码</span></div><div class="line">    List&lt;TypeAdapterFactory&gt; factories = <span class="keyword">new</span> ArrayList&lt;TypeAdapterFactory&gt;();</div><div class="line"></div><div class="line">    <span class="comment">// built-in type adapters that cannot be overridden</span></div><div class="line">    factories.add(TypeAdapters.JSON_ELEMENT_FACTORY);</div><div class="line">    factories.add(ObjectTypeAdapter.FACTORY);</div><div class="line"></div><div class="line">    <span class="comment">// the excluder must precede all adapters that handle user-defined types</span></div><div class="line">    factories.add(excluder);</div><div class="line"></div><div class="line">    <span class="comment">// 添加用户自定义的 typeadapter</span></div><div class="line">    factories.addAll(typeAdapterFactories);</div><div class="line"></div><div class="line">    <span class="comment">// 添加基本类型的 tpyeAdatper</span></div><div class="line">    factories.add(TypeAdapters.STRING_FACTORY);</div><div class="line">    factories.add(TypeAdapters.INTEGER_FACTORY);</div><div class="line">    factories.add(TypeAdapters.BOOLEAN_FACTORY);</div><div class="line">    factories.add(TypeAdapters.BYTE_FACTORY);</div><div class="line">    factories.add(TypeAdapters.SHORT_FACTORY);</div><div class="line">    <span class="comment">// 后面还有很多，此处省略 ...</span></div><div class="line"></div><div class="line">    <span class="comment">// type adapters for composite and user-defined types</span></div><div class="line">    factories.add(<span class="keyword">new</span> CollectionTypeAdapterFactory(constructorConstructor));</div><div class="line">    factories.add(<span class="keyword">new</span> MapTypeAdapterFactory(constructorConstructor, complexMapKeySerialization));</div><div class="line">    factories.add(<span class="keyword">new</span> JsonAdapterAnnotationTypeAdapterFactory(constructorConstructor));</div><div class="line">    factories.add(TypeAdapters.ENUM_FACTORY);</div><div class="line">    <span class="comment">// 用于反射的 typeAdapter</span></div><div class="line">    factories.add(<span class="keyword">new</span> ReflectiveTypeAdapterFactory(</div><div class="line">        constructorConstructor, fieldNamingStrategy, excluder));</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.factories = Collections.unmodifiableList(factories);</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>我们再回到　fromJson() 中，刚才分析到了 getAdapter()<br>接下来继续</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">T object = typeAdapter.read(reader);</div></pre></td></tr></table></figure>
+<p>找到匹配的 typeAdapter 就会调用其 read() 函数进行解析，此处我们着重分析 Gson 的反射实现原理，所以此处查看 ReflectiveTypeAdapterFactory 中 adapter 的 read() 实现</p>
+<p><strong>ReflectiveTypeAdapterFactory.java</strong></p>
+<p>在 ReflectiveTypeAdapterFactory 中有内部类 Adapter 如下，真正调用的是其 read() 函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Adapter</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">TypeAdapter</span>&lt;<span class="title">T</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> T <span class="title">read</span><span class="params">(JsonReader in)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">      <span class="keyword">if</span> (in.peek() == JsonToken.NULL) &#123;</div><div class="line">        in.nextNull();</div><div class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      T instance = constructor.construct(); <span class="comment">// 反射创建实例</span></div><div class="line"></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        in.beginObject(); <span class="comment">// 开始读Object，会设置 stack[stackSize ++] = JsonScope.EMPTY_OBJECT 后面 in.doPeek() 会用到</span></div><div class="line">        <span class="keyword">while</span> (in.hasNext()) &#123; <span class="comment">// 调用 doPeek()</span></div><div class="line">          String name = in.nextName(); <span class="comment">// 获取变量名</span></div><div class="line">          BoundField field = boundFields.get(name);</div><div class="line">          <span class="keyword">if</span> (field == <span class="keyword">null</span> || !field.deserialized) &#123;</div><div class="line">            in.skipValue();</div><div class="line">          &#125; <span class="keyword">else</span> &#123;</div><div class="line">            field.read(in, instance); <span class="comment">// 给变量设值 调用 field.set() 设值 其中会调用 adapter.read() 递归</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125; <span class="keyword">catch</span> (...) &#123;</div><div class="line">      <span class="comment">// 省略代码</span></div><div class="line">      &#125;</div><div class="line"></div><div class="line">      in.endObject();</div><div class="line">      <span class="keyword">return</span> instance; <span class="comment">// 返回解析到的对象实例</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>至此整体大概的解析完成，总结一下整体流程，附上流程图<br><img src="/img/gson/gson.png" alt="流程图"></p>
+<p>最后介绍一些比较重要的函数<br>上述代码中的 in.beginObject() in.hasNext() in.nextName() in.skipValue() 都会调用 Reader 中的 doPeek()，其他的代码也会调用 doPeek() 所以这个函数非常重要，接下来解析此函数</p>
+<p>JsonReader.java </p>
+<ul>
+<li>doPeek()<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">doPeek</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">  <span class="comment">// 每次调用 beginXXX 的时候都会调用 stack[stackSize ++] = JsonScope.XXX</span></div><div class="line">  <span class="keyword">int</span> peekStack = stack[stackSize - <span class="number">1</span>]; <span class="comment">// 获取 stack 顶部标志</span></div><div class="line">  <span class="keyword">if</span> (peekStack == JsonScope.EMPTY_ARRAY) &#123;</div><div class="line">    stack[stackSize - <span class="number">1</span>] = JsonScope.NONEMPTY_ARRAY;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (peekStack == JsonScope.NONEMPTY_ARRAY) &#123;</div><div class="line">    <span class="keyword">int</span> c = nextNonWhitespace(<span class="keyword">true</span>); <span class="comment">// 获取下一个非空字符</span></div><div class="line">    <span class="keyword">switch</span> (c) &#123; <span class="comment">// 解析字符，下面的代码和这个类似，就省略了</span></div><div class="line">    <span class="keyword">case</span> <span class="string">']'</span>:</div><div class="line">      <span class="keyword">return</span> peeked = PEEKED_END_ARRAY;</div><div class="line">    <span class="keyword">case</span> <span class="string">';'</span>:</div><div class="line">      checkLenient(); <span class="comment">// fall-through</span></div><div class="line">    <span class="keyword">case</span> <span class="string">','</span>:</div><div class="line">      <span class="keyword">break</span>;</div><div class="line">    <span class="keyword">default</span>:</div><div class="line">      <span class="keyword">throw</span> syntaxError(<span class="string">"Unterminated array"</span>);</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( ... ) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">int</span> c = nextNonWhitespace(<span class="keyword">true</span>);</div><div class="line">  <span class="keyword">switch</span> (c) &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">int</span> result = peekKeyword(); </div><div class="line">  <span class="keyword">if</span> (result != PEEKED_NONE) &#123;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  result = peekNumber();</div><div class="line">  <span class="keyword">if</span> (result != PEEKED_NONE) &#123;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> peeked = PEEKED_UNQUOTED;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>peek() 函数内部基本上是对 doPeek() 的调用</p>
+<p><strong>JsonReader.java</strong> </p>
+<ul>
+<li>nextNonWhitespace()<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">nextNonWhitespace</span><span class="params">(<span class="keyword">boolean</span> throwOnEof)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line"></div><div class="line">  <span class="keyword">char</span>[] buffer = <span class="keyword">this</span>.buffer;</div><div class="line">  <span class="keyword">int</span> p = pos; <span class="comment">// pos 表示当前解析的位置</span></div><div class="line">  <span class="keyword">int</span> l = limit; <span class="comment">// limit 表示最后位置</span></div><div class="line">  <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (p == l) &#123; <span class="comment">// 说明 buffer 已经读完了</span></div><div class="line">      pos = p;</div><div class="line">      <span class="keyword">if</span> (!fillBuffer(<span class="number">1</span>)) &#123; <span class="comment">// 从 instream 中填充 buffer， 参数表示最少需要填充多少， 返回表示是否能满足最少需要的</span></div><div class="line">        <span class="keyword">break</span>;</div><div class="line">      &#125;</div><div class="line">      p = pos; <span class="comment">// 更新数据</span></div><div class="line">      l = limit;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> c = buffer[p++]; <span class="comment">// 获取当前字符</span></div><div class="line">    <span class="keyword">if</span> (c == <span class="string">'\n'</span>) &#123;</div><div class="line">      lineNumber++;</div><div class="line">      lineStart = p; <span class="comment">// 当前行从哪个位置开始</span></div><div class="line">      <span class="keyword">continue</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">' '</span> || c == <span class="string">'\r'</span> || c == <span class="string">'\t'</span>) &#123; <span class="comment">// 过滤空格等字符</span></div><div class="line">      <span class="keyword">continue</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (c == <span class="string">'/'</span>) &#123; <span class="comment">// 读取 /**/ 和 // 的注释</span></div><div class="line">      pos = p;</div><div class="line">      <span class="keyword">if</span> (p == l) &#123;</div><div class="line">        pos--; <span class="comment">// push back '/' so it's still in the buffer when this method returns</span></div><div class="line">        <span class="keyword">boolean</span> charsLoaded = fillBuffer(<span class="number">2</span>);</div><div class="line">        pos++; <span class="comment">// consume the '/' again</span></div><div class="line">        <span class="keyword">if</span> (!charsLoaded) &#123;</div><div class="line">          <span class="keyword">return</span> c;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      checkLenient(); <span class="comment">// 检测兼容性，先忽略</span></div><div class="line">      <span class="keyword">char</span> peek = buffer[pos];</div><div class="line">      <span class="keyword">switch</span> (peek) &#123;</div><div class="line">      <span class="keyword">case</span> <span class="string">'*'</span>: <span class="comment">// 读取 "/**/" 注释</span></div><div class="line">        pos++;</div><div class="line">        <span class="keyword">if</span> (!skipTo(<span class="string">"*/"</span>)) &#123;</div><div class="line">          <span class="keyword">throw</span> syntaxError(<span class="string">"Unterminated comment"</span>);</div><div class="line">        &#125;</div><div class="line">        p = pos + <span class="number">2</span>;</div><div class="line">        l = limit;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line"></div><div class="line">      <span class="keyword">case</span> <span class="string">'/'</span>: <span class="comment">// 读取 "//" 注释</span></div><div class="line">        <span class="comment">// skip a // end-of-line comment</span></div><div class="line">        pos++;</div><div class="line">        skipToEndOfLine();</div><div class="line">        p = pos;</div><div class="line">        l = limit;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line"></div><div class="line">      <span class="keyword">default</span>:</div><div class="line">        <span class="keyword">return</span> c;</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">'#'</span>) &#123; <span class="comment">// 读取 '#' 的注释， 直接跳到下一行</span></div><div class="line">      pos = p;</div><div class="line">      checkLenient();</div><div class="line">      skipToEndOfLine();</div><div class="line">      p = pos;</div><div class="line">      l = limit;</div><div class="line">    &#125; <span class="keyword">else</span> &#123; <span class="comment">// 返回解析到的字符，并重置pos</span></div><div class="line">      pos = p;</div><div class="line">      <span class="keyword">return</span> c;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (throwOnEof) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> EOFException(<span class="string">"End of input"</span></div><div class="line">        + <span class="string">" at line "</span> + getLineNumber() + <span class="string">" column "</span> + getColumnNumber());</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在 nextNonWhitespace 中会调用到 fillBuffer() 来填充，接下来看一下 fillBuffer() 的实现<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">fillBuffer</span><span class="params">(<span class="keyword">int</span> minimum)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">  <span class="keyword">char</span>[] buffer = <span class="keyword">this</span>.buffer;</div><div class="line">  lineStart -= pos;</div><div class="line">  <span class="keyword">if</span> (limit != pos) &#123;</div><div class="line">    limit -= pos;</div><div class="line">    System.arraycopy(buffer, pos, buffer, <span class="number">0</span>, limit); <span class="comment">// 覆盖之前解析过的字符</span></div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    limit = <span class="number">0</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  pos = <span class="number">0</span>;</div><div class="line">  <span class="keyword">int</span> total;</div><div class="line">  <span class="keyword">while</span> ((total = in.read(buffer, limit, buffer.length - limit)) != -<span class="number">1</span>) &#123; </div><div class="line">    <span class="comment">// 从 reader 中读取字符填满 buffer</span></div><div class="line">    limit += total;</div><div class="line"></div><div class="line">    <span class="comment">// 如果是第一次读取的话，要保证首个字符不是非法字符</span></div><div class="line">    <span class="keyword">if</span> (lineNumber == <span class="number">0</span> &amp;&amp; lineStart == <span class="number">0</span> &amp;&amp; limit &gt; <span class="number">0</span> &amp;&amp; buffer[<span class="number">0</span>] == <span class="string">'\ufeff'</span>) &#123;</div><div class="line">      pos++;</div><div class="line">      lineStart++;</div><div class="line">      minimum++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (limit &gt;= minimum) &#123; <span class="comment">// 可以满足需求的字符数量</span></div><div class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这样 Gson 使用反射来解析 json 大体上解析完了，接下来自己实现了一个简单的Json解析器，地址如下:<a href="https://github.com/5A59/JsonParser" target="_blank" rel="external">Json解析器</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码解析/" rel="tag">#源码解析</a>
+          
+            <a href="/tags/Android/" rel="tag">#Android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/27/打造自己的Android-Universal-Image-Loader/" rel="prev" title="打造自己的Android-Universal-Image-Loader">
+                打造自己的Android-Universal-Image-Loader <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/27/Gson源码解析/"
+     data-title="Gson源码解析"
+     data-content=""
+     data-url="http://yoursite.com/2016/09/27/Gson源码解析/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/27/Gson源码解析/"
+           data-title="Gson源码解析" data-url="http://yoursite.com/2016/09/27/Gson源码解析/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/headimg.jpg"
+               alt="ZY5A59" />
+          <p class="site-author-name" itemprop="name">ZY5A59</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/5A59" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/u013480667" title="CSDN" target="_blank">CSDN</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ZY5A59</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"zy5a59"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
