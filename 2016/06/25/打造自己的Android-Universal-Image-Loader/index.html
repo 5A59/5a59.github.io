@@ -104,7 +104,7 @@
 编码实现">
 <meta property="og:image" content="http://yoursite.com/img/Android-UIL/uil.png">
 <meta property="og:image" content="http://yoursite.com/img/Android-UIL/dir.png">
-<meta property="og:updated_time" content="2016-10-08T02:29:15.000Z">
+<meta property="og:updated_time" content="2016-10-08T02:32:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="打造自己的Android-Universal-Image-Loader">
 <meta name="twitter:description" content="最近阅读了Android-Universal-Image-Loader的源码，又正在学习设计模式，就写一个ImageLoader练练手。
@@ -362,8 +362,8 @@
 <li>编码实现</li>
 </ul>
 <a id="more"></a>
-<h4 id="0-简述图片加载器的思路"><a href="#0-简述图片加载器的思路" class="headerlink" title="0. 简述图片加载器的思路"></a>0. 简述图片加载器的思路</h4><p>个人理解中，项目中使用图片加载器的原因主要是能提高图片加载速度，节省用户流量，防止大图片引发OOM，大部分实现方法就是采用三级缓存，网络加载-内存缓存-磁盘缓存，加载时先在内存缓存中查找，找到直接加载，没有找到再到磁盘缓存中查找，并加载到内存缓存中，如果都没有找到则从网络下载，并缓存到内存和磁盘中。加载到图片后根据实际需要对图片进行处理并展示。这就是图片加载的原理。</p>
-<h4 id="1-简要介绍一下Android-Universal-Image-Loader的实现。"><a href="#1-简要介绍一下Android-Universal-Image-Loader的实现。" class="headerlink" title="1.简要介绍一下Android-Universal-Image-Loader的实现。"></a>1.简要介绍一下Android-Universal-Image-Loader的实现。</h4><p>网上有很多关于Android-Universal-Image-Loader源码解析，这里只简要介绍一下。<br>Android-UIL中最主要的函数就是Imageloader.displayImage();下面流程图显示了整个调用流程<br><img src="/img/Android-UIL/uil.png" alt="UIL"><br>Android-UIL中主要有几个重要的类：<br><strong> ImageLoader </strong><br>图片加载等主要调用的类，使用了单例。<br>主要成员变量 </p>
+<h4 id="简述图片加载器的思路"><a href="#简述图片加载器的思路" class="headerlink" title="简述图片加载器的思路"></a>简述图片加载器的思路</h4><p>个人理解中，项目中使用图片加载器的原因主要是能提高图片加载速度，节省用户流量，防止大图片引发OOM，大部分实现方法就是采用三级缓存，网络加载-内存缓存-磁盘缓存，加载时先在内存缓存中查找，找到直接加载，没有找到再到磁盘缓存中查找，并加载到内存缓存中，如果都没有找到则从网络下载，并缓存到内存和磁盘中。加载到图片后根据实际需要对图片进行处理并展示。这就是图片加载的原理。</p>
+<h4 id="简要介绍一下Android-Universal-Image-Loader的实现。"><a href="#简要介绍一下Android-Universal-Image-Loader的实现。" class="headerlink" title="简要介绍一下Android-Universal-Image-Loader的实现。"></a>简要介绍一下Android-Universal-Image-Loader的实现。</h4><p>网上有很多关于Android-Universal-Image-Loader源码解析，这里只简要介绍一下。<br>Android-UIL中最主要的函数就是Imageloader.displayImage();下面流程图显示了整个调用流程<br><img src="/img/Android-UIL/uil.png" alt="UIL"><br>Android-UIL中主要有几个重要的类：<br><strong> ImageLoader </strong><br>图片加载等主要调用的类，使用了单例。<br>主要成员变量 </p>
 <ul>
 <li>ImageLoaderConfiguration configuration; // 保存主要的配置 用了Builder模式 </li>
 <li>ImageLoaderEngine engine; // 用于派发异步任务 </li>
@@ -429,14 +429,14 @@
 <ul>
 <li>getStream();</li>
 </ul>
-<h4 id="2-总结一些用到的设计模式"><a href="#2-总结一些用到的设计模式" class="headerlink" title="2. 总结一些用到的设计模式"></a>2. 总结一些用到的设计模式</h4><ul>
+<h4 id="总结一些用到的设计模式"><a href="#总结一些用到的设计模式" class="headerlink" title="总结一些用到的设计模式"></a>总结一些用到的设计模式</h4><ul>
 <li>六大设计原则<br>单一职责<br>开闭原则<br>里氏替换<br>依赖倒置<br>接口隔离<br>迪米特法则</li>
 <li>单例模式</li>
 <li>Builder模式</li>
 <li>外观模式</li>
 <li>工厂模式</li>
 </ul>
-<h4 id="3-设计整体框架"><a href="#3-设计整体框架" class="headerlink" title="3. 设计整体框架"></a>3. 设计整体框架</h4><p>项目目录如下：<br><img src="/img/Android-UIL/dir.png" alt="dir"><br>下面是各个类的一些主要成员变量和成员函数</p>
+<h4 id="设计整体框架"><a href="#设计整体框架" class="headerlink" title="设计整体框架"></a>设计整体框架</h4><p>项目目录如下：<br><img src="/img/Android-UIL/dir.png" alt="dir"><br>下面是各个类的一些主要成员变量和成员函数</p>
 <p>ImageLoader </p>
 <ul>
 <li>ImageConfig</li>
@@ -471,10 +471,7 @@
 <ul>
 <li>load()</li>
 </ul>
-<ol>
-<li>具体编码如下</li>
-</ol>
-<p><a href="https://github.com/5A59/ImageLoader/" target="_blank" rel="external">ImageLoader地址</a></p>
+<h2 id="具体编码如下"><a href="#具体编码如下" class="headerlink" title="具体编码如下"></a>具体编码如下</h2><p><a href="https://github.com/5A59/ImageLoader/" target="_blank" rel="external">ImageLoader地址</a></p>
 
       
     </div>
@@ -683,7 +680,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0-简述图片加载器的思路"><span class="nav-number">1.</span> <span class="nav-text">0. 简述图片加载器的思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-简要介绍一下Android-Universal-Image-Loader的实现。"><span class="nav-number">2.</span> <span class="nav-text">1.简要介绍一下Android-Universal-Image-Loader的实现。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-总结一些用到的设计模式"><span class="nav-number">3.</span> <span class="nav-text">2. 总结一些用到的设计模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-设计整体框架"><span class="nav-number">4.</span> <span class="nav-text">3. 设计整体框架</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简述图片加载器的思路"><span class="nav-number">1.</span> <span class="nav-text">简述图片加载器的思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简要介绍一下Android-Universal-Image-Loader的实现。"><span class="nav-number">2.</span> <span class="nav-text">简要介绍一下Android-Universal-Image-Loader的实现。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结一些用到的设计模式"><span class="nav-number">3.</span> <span class="nav-text">总结一些用到的设计模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设计整体框架"><span class="nav-number">4.</span> <span class="nav-text">设计整体框架</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体编码如下"><span class="nav-number"></span> <span class="nav-text">具体编码如下</span></a></div>
             
           </div>
         </section>
